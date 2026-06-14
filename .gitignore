@@ -1,2 +1,28 @@
-*.pyc
+#Python - pliki tymczasowe
 __pycache__/
+*.py[cod]
+*$py.class
+
+#Baza danych Django
+db.sqlite3
+db.sqlite3-journal
+
+#Środowisko wirtualne
+.venv/
+venv/
+env/
+ENV/
+
+#Pliki wgrywane przez użytkowników (np. zdjęcia koktajli i składników)
+media/
+
+#Pliki konfiguracyjne IDE i edytorów kodu (np. VS Code, PyCharm)
+.vscode/
+.idea/
+
+#Ukryte pliki systemowe (Windows / macOS)
+Thumbs.db
+.DS_Store
+
+#Środowiskowe zmienne konfiguracyjne (jeśli w przyszłości dodasz)
+.env

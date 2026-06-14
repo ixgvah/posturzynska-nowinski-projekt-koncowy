@@ -4,10 +4,13 @@ from django.contrib.auth.decorators import login_required
 from .models import Cocktail, UsersFavouriteCocktails, Ingredient, CocktailIngrediets
 from .forms import CocktailForm, CocktailIngredientFormSet, IngredientForm
 from django.core.paginator import Paginator
+import openpyxl
+from django.http import HttpResponse
+from django.shortcuts import redirect
 
 
 def cocktails_list(request):
-    cocktails = Cocktail.objects.all()
+    cocktails = Cocktail.objects.all().order_by('-id')
     paginator = Paginator(cocktails, 5)
     page = request.GET.get('page')
     cocktails = paginator.get_page(page)
@@ -26,7 +29,7 @@ def create_cocktail(request):
             cocktail = form.save(commit=False)
             cocktail.user = request.user
             cocktail.save()
-            formset.instance = cocktail  # ← przypisz instancję przed zapisem
+            formset.instance = cocktail
             formset.save()
             return redirect('/cocktails/')
     else:
@@ -149,3 +152,45 @@ def create_ingredient(request):
     else:
         form = IngredientForm()
     return render(request, 'ingredients/create_ingredient.html', {'form': form})
+
+def export_cocktails_to_excel(request):
+    if request.method == 'POST':
+        selected_ids = request.POST.getlist('selected_cocktails')
+        if not selected_ids:
+            return redirect('cocktails')
+
+        cocktails = Cocktail.objects.filter(id__in=selected_ids)
+
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Chosen cocktails"
+
+        headers = ['Name', 'Category', 'Ingredients']
+        ws.append(headers)
+        for cell in ws[1]:
+            cell.font = openpyxl.styles.Font(bold=True)
+
+        for cocktail in cocktails:
+            ingredients_qs = cocktail.cocktailingrediets_set.all()
+
+            ingredients_list = []
+            for ci in ingredients_qs:
+                ingredients_list.append(f"{ci.ingredient.name} ({ci.quantity} {ci.unit})")
+
+            ingredients_string = ", ".join(ingredients_list)
+            ws.append([cocktail.name, cocktail.category, ingredients_string])
+
+        for col in ws.columns:
+            max_len = max(len(str(cell.value or '')) for cell in col)
+            col_letter = openpyxl.utils.get_column_letter(col[0].column)
+            ws.column_dimensions[col_letter].width = max(max_len + 3, 10)
+
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename="your_cocktails.xlsx"'
+        wb.save(response)
+
+        return response
+
+    return redirect('cocktails')

@@ -7,34 +7,52 @@
 {% block content %}
     {% if request.user.is_authenticated %}
     <div class="small_nav">
-                <a href="{% url 'users_cocktails' %}" class="small_nav_my_cocktails">MY COCKTAILS</a>
-                <a href="/cocktails/users_favourite_cocktails/">STARRED</a>
-                <a href="/cocktails/create/">CREATE</a>
+        <a href="{% url 'users_cocktails' %}" class="small_nav_my_cocktails">MY COCKTAILS</a>
+        <a href="/cocktails/users_favourite_cocktails/">STARRED</a>
+        <a href="/cocktails/create/">CREATE</a>
     </div>
     {% endif %}
+
 <section id="about">
     <div>
         <div class="header_block">
             <h1 id='header_cocktail_list'>Cocktail list</h1>
-        <p id="cocktail_list_text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            <p id="cocktail_list_text">"Planujesz imprezę lub wieczór z koktajlami? Zaznacz te, które chcesz przygotować, a następnie kliknij przycisk na dole strony. Aplikacja automatycznie podliczy potrzebne składniki i wygeneruje dla Ciebie gotową listę zakupów w pliku Excel!"</p>
         </div>
 
-        {% for cocktail in cocktails %}
-        {% include 'cocktails/cocktail_index.html' with cocktail=cocktail %}
+            <form id="export-form" method="POST" action="{% url 'export_excel' %}">
+        {% csrf_token %}
+    </form>
+
+    {% for cocktail in cocktails %}
+        <div style="display: flex; align-items: center; margin-bottom: 15px; gap: 15px;">
+
+            <input type="checkbox" name="selected_cocktails" value="{{ cocktail.id }}" form="export-form" style="transform: scale(1.5); cursor: pointer;">
+
+            <div style="flex-grow: 1;">
+                {% include 'cocktails/cocktail_index.html' with cocktail=cocktail %}
+            </div>
+
+        </div>
     {% endfor %}
+
+    <div style="margin-top: 30px; text-align: center;">
+            <button type="submit" form="export-form" style="padding: 10px 20px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Eksportuj zaznaczone do Excela
+            </button>
     </div>
 
     <div class="pagination">
-    {% if cocktails.has_previous %}
-        <a href="?page={{ cocktails.previous_page_number }}">←</a>
-    {% endif %}
+        {% if cocktails.has_previous %}
+            <a href="?page={{ cocktails.previous_page_number }}">←</a>
+        {% endif %}
 
-    <span>{{ cocktails.number }} / {{ cocktails.paginator.num_pages }}</span>
+        <span>{{ cocktails.number }} / {{ cocktails.paginator.num_pages }}</span>
 
-    {% if cocktails.has_next %}
-        <a href="?page={{ cocktails.next_page_number }}">→</a>
-    {% endif %}
-</div>
+        {% if cocktails.has_next %}
+            <a href="?page={{ cocktails.next_page_number }}">→</a>
+        {% endif %}
+    </div>
 
-  </section>
+</section>
 {% endblock %}

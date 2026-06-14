@@ -8,7 +8,6 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True)
     image = models.ImageField(upload_to='ingredients/', blank=True, null=True)
-    is_alcoholic = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -38,7 +37,7 @@ class CocktailIngrediets(models.Model):
         ('tsp', 'łyżeczka'),
         ('tbsp', 'łyżka'),
         ('piece', 'sztuka'),
-        ('dash', 'dash'),
+        ('leaves', 'liść'),
     ]
     unit = models.CharField(max_length=50, choices=POSSIBLE_UNITS, default='ml')
 

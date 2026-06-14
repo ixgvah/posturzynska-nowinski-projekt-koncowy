@@ -14,4 +14,5 @@ urlpatterns = [
     path('ingredients/<int:pk>/edit/', views.edit_ingredient, name='edit_ingredient'),
     path('ingredients/<int:pk>/delete/', views.delete_ingredient, name='delete_ingredient'),
     path('ingredients/create/', views.create_ingredient, name='create_ingredient'),
+    path('export/excel/', views.export_cocktails_to_excel, name='export_excel'),
 ]

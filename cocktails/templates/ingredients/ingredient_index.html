@@ -8,12 +8,6 @@
     {% endif %}
     <div class="cocktail-card-body">
         <h2 class="drink_name">{{ ingredient.name }}</h2>
-        {% if ingredient.is_alcoholic %}
-            <h3 class="drink_category">ALCOHOLIC</h3>
-        {% else %}
-            <h3 class="drink_category">ALCOHOL FREE</h3>
-        {% endif %}
-
         <p class="drink_description">{{ ingredient.description }}</p>
 
         {% if request.user.is_authenticated %}
