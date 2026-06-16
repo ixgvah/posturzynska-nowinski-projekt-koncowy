@@ -1,41 +1,77 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
-<div class="cocktail_details">
+{% block title %}{{ cocktail.name }} — CocktailMIX{% endblock %}
 
+{% block content %}
+<section class="auth-page" data-auth-panel>
+  <div class="auth-split">
     {% if cocktail.image %}
-        <img src="{{ cocktail.image.url }}" alt="{{ cocktail.name }}" class="drink_photo">
+      {% include 'cocktails/_split_visual.html' with eyebrow=cocktail.category title_line1=cocktail.name title_line2="receptura." text=cocktail.description|default:"Twój drink — składniki i sposób przygotowania po prawej."|truncatewords:24 image_url=cocktail.image.url %}
     {% else %}
-        <img src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="{{ cocktail.name }}" class="drink_photo">
+      {% include 'cocktails/_split_visual.html' with eyebrow=cocktail.category title_line1=cocktail.name title_line2="receptura." text=cocktail.description|default:"Twój drink — składniki i sposób przygotowania po prawej."|truncatewords:24 %}
     {% endif %}
 
-    <div class="cocktail_details_body">
-        <h2 class="drink_name">{{ cocktail.name }}</h2>
+    <div class="auth-panel auth-panel--scroll">
+      <div class="auth-panel__inner auth-panel__inner--wide">
+        <header class="auth-panel__head" data-auth-field>
+          <p class="auth-panel__eyebrow">{{ cocktail.category }}</p>
+          <h2 class="auth-panel__title">{{ cocktail.name }}</h2>
+          <p class="auth-panel__lead">Składniki i sposób przygotowania.</p>
+        </header>
 
-        <div class="cocktail_ingredients">
-            <h3>Składniki</h3>
-            <ul>
-                {% for item in ingredients %}
-                    <li>{{ item.ingredient.name }} — {{ item.quantity }} {{ item.get_unit_display }}</li>
-                {% empty %}
-                    <li>Brak składników.</li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        <h3 class="drink_category">{{ cocktail.category }}</h3>
-        <p class="drink_description">{{ cocktail.description }}</p>
-
-        {% if request.user == cocktail.user %}
-            <a href="{% url 'edit_cocktail' cocktail.id %}">EDIT</a>
-            <form method="POST" action="{% url 'delete_cocktail' cocktail.id %}">
-                {% csrf_token %}
-                <button type="submit">DELETE</button>
+        <nav class="cocktail-nav" data-auth-field aria-label="Nawigacja">
+          <a href="{% url 'cocktails' %}">← Wróć do listy</a>
+          {% if request.user.is_authenticated %}
+            <form method="POST" action="{% url 'toggle-star' cocktail.id %}" class="cocktail-nav__form">
+              {% csrf_token %}
+              <button type="submit" class="cocktail-nav__btn">Ulubione</button>
             </form>
+          {% endif %}
+        </nav>
+
+        {% if cocktail.image %}
+          <div class="cocktail-detail__thumb" data-auth-field>
+            <img src="{{ cocktail.image.url }}" alt="{{ cocktail.name }}">
+          </div>
         {% endif %}
 
-    </div>
+        <section class="cocktail-recipe" data-auth-field>
+          <h3 class="cocktail-recipe__title">Składniki</h3>
+          <ul class="cocktail-recipe__list">
+            {% for item in ingredients %}
+              <li>
+                <span class="cocktail-recipe__name">{{ item.ingredient.name }}</span>
+                <span class="cocktail-recipe__qty">{{ item.quantity }} {{ item.get_unit_display }}</span>
+              </li>
+            {% empty %}
+              <li class="cocktail-recipe__empty">Brak składników.</li>
+            {% endfor %}
+          </ul>
+        </section>
 
-</div>
+        {% if cocktail.description %}
+          <section class="cocktail-recipe cocktail-recipe--steps" data-auth-field>
+            <h3 class="cocktail-recipe__title">Przygotowanie</h3>
+            <p class="cocktail-recipe__text">{{ cocktail.description }}</p>
+          </section>
+        {% endif %}
+
+        {% if request.user == cocktail.user %}
+          <div class="cocktail-detail__actions" data-auth-field>
+            <a class="cocktail-detail__link" href="{% url 'edit_cocktail' cocktail.id %}">Edytuj</a>
+            <form method="POST" action="{% url 'delete_cocktail' cocktail.id %}" class="cocktail-detail__delete-form">
+              {% csrf_token %}
+              <button type="submit" class="cocktail-detail__delete">Usuń</button>
+            </form>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/auth-panel.js' %}"></script>
 {% endblock %}

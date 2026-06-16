@@ -1,28 +1,46 @@
 {% extends 'base.html' %}
+{% load static %}
 
-
-{% block title %}
-    My Cocktails
-{% endblock %}
+{% block title %}Moje koktajle — CocktailMIX{% endblock %}
 
 {% block content %}
-{% if request.user.is_authenticated %}
-    <div class="small_nav">
-                <a href="{% url 'cocktails' %}">COCKTAILS</a>
-                <a href="/cocktails/users_favourite_cocktails/">STARRED</a>
-                <a href="/cocktails/create/">CREATE</a>
-    </div>
-    {% endif %}
-<section>
-    <div>
-        <h1>My Cocktails</h1>
+<section class="auth-page" data-auth-panel>
+  <div class="auth-split">
+    {% include 'cocktails/_split_visual.html' with eyebrow="Twój bar" title_line1="Moje" title_line2="koktajle." text="Wszystkie drinki, które sam stworzyłeś — edytuj, usuwaj i rozwijaj kolekcję." %}
 
-        {% for cocktail in cocktails %}
-            {% include 'cocktails/cocktail_index.html' with cocktail=cocktail %}
-        {% empty %}
-            <p>Nie masz jeszcze żadnych koktajli.</p>
-            <a href="/cocktails/create/">Create your own Cocktail!</a>
-        {% endfor %}
+    <div class="auth-panel auth-panel--scroll">
+      <div class="auth-panel__inner auth-panel__inner--wide">
+        <header class="auth-panel__head" data-auth-field>
+          <p class="auth-panel__eyebrow">Koktajle</p>
+          <h2 class="auth-panel__title">Twoje receptury</h2>
+          <p class="auth-panel__lead">Zarządzaj koktajlami dodanymi przez Ciebie.</p>
+        </header>
+
+        <nav class="cocktail-nav" data-auth-field aria-label="Nawigacja koktajli">
+          <a href="{% url 'cocktails' %}">Wszystkie</a>
+          <a href="{% url 'users_cocktails' %}" class="is-active">Moje</a>
+          <a href="{% url 'users_favourite_cocktails' %}">Ulubione</a>
+          <a href="{% url 'create_cocktail' %}">Dodaj</a>
+        </nav>
+
+        <div class="cocktail-list">
+          {% for cocktail in cocktails %}
+            <div class="cocktail-list__row cocktail-list__row--solo" data-auth-field>
+              {% include 'cocktails/cocktail_index.html' with cocktail=cocktail %}
+            </div>
+          {% empty %}
+            <div class="cocktail-empty-state" data-auth-field>
+              <p class="cocktail-empty">Nie masz jeszcze żadnych koktajli.</p>
+              <a class="cocktail-empty-state__link" href="{% url 'create_cocktail' %}">Stwórz pierwszy koktajl →</a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
     </div>
+  </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/auth-panel.js' %}"></script>
 {% endblock %}

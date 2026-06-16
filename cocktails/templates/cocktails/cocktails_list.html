@@ -1,58 +1,77 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}
-    Cocktails List
-{% endblock %}
+{% block title %}Koktajle — CocktailMIX{% endblock %}
 
 {% block content %}
-    {% if request.user.is_authenticated %}
-    <div class="small_nav">
-        <a href="{% url 'users_cocktails' %}" class="small_nav_my_cocktails">MY COCKTAILS</a>
-        <a href="/cocktails/users_favourite_cocktails/">STARRED</a>
-        <a href="/cocktails/create/">CREATE</a>
-    </div>
-    {% endif %}
+<section class="auth-page" data-auth-panel>
+  <div class="auth-split">
+    {% include 'cocktails/_split_visual.html' with eyebrow="Kolekcja" title_line1="Lista" title_line2="koktajli." text="Zaznacz drinki na imprezę i wyeksportuj listę składników do Excela." %}
 
-<section id="about">
-    <div>
-        <div class="header_block">
-            <h1 id='header_cocktail_list'>Cocktail list</h1>
-            <p id="cocktail_list_text">"Planujesz imprezę lub wieczór z koktajlami? Zaznacz te, które chcesz przygotować, a następnie kliknij przycisk na dole strony. Aplikacja automatycznie podliczy potrzebne składniki i wygeneruje dla Ciebie gotową listę zakupów w pliku Excel!"</p>
-        </div>
+    <div class="auth-panel auth-panel--scroll">
+      <div class="auth-panel__inner auth-panel__inner--wide">
+        <header class="auth-panel__head" data-auth-field>
+          <p class="auth-panel__eyebrow">Koktajle</p>
+          <h2 class="auth-panel__title">Przeglądaj drinki</h2>
+          <p class="auth-panel__lead">Wybierz koktajle, które chcesz przygotować, i pobierz listę zakupów.</p>
+        </header>
 
-            <form id="export-form" method="POST" action="{% url 'export_excel' %}">
-        {% csrf_token %}
-    </form>
+        {% if request.user.is_authenticated %}
+          <nav class="cocktail-nav" data-auth-field aria-label="Nawigacja koktajli">
+            <a href="{% url 'cocktails' %}" class="is-active">Wszystkie</a>
+            <a href="{% url 'users_cocktails' %}">Moje</a>
+            <a href="{% url 'users_favourite_cocktails' %}">Ulubione</a>
+            <a href="{% url 'create_cocktail' %}">Dodaj</a>
+          </nav>
+        {% endif %}
 
-    {% for cocktail in cocktails %}
-        <div style="display: flex; align-items: center; margin-bottom: 15px; gap: 15px;">
+        <form id="export-form" method="POST" action="{% url 'export_excel' %}">
+          {% csrf_token %}
+        </form>
 
-            <input type="checkbox" name="selected_cocktails" value="{{ cocktail.id }}" form="export-form" style="transform: scale(1.5); cursor: pointer;">
-
-            <div style="flex-grow: 1;">
-                {% include 'cocktails/cocktail_index.html' with cocktail=cocktail %}
+        <div class="cocktail-list">
+          {% for cocktail in cocktails %}
+            <div class="cocktail-list__row" data-auth-field>
+              <label class="cocktail-list__check">
+                <input type="checkbox" name="selected_cocktails" value="{{ cocktail.id }}" form="export-form">
+                <span class="cocktail-list__check-box" aria-hidden="true"></span>
+              </label>
+              {% include 'cocktails/cocktail_index.html' with cocktail=cocktail %}
             </div>
-
+          {% empty %}
+            <p class="cocktail-empty" data-auth-field>Brak koktajli w bazie.</p>
+          {% endfor %}
         </div>
-    {% endfor %}
 
-    <div style="margin-top: 30px; text-align: center;">
-            <button type="submit" form="export-form" style="padding: 10px 20px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                Eksportuj zaznaczone do Excela
-            </button>
-    </div>
-
-    <div class="pagination">
-        {% if cocktails.has_previous %}
-            <a href="?page={{ cocktails.previous_page_number }}">←</a>
+        {% if cocktails %}
+          <button class="auth-form__submit cocktail-export-btn" type="submit" form="export-form" data-auth-field>
+            <span class="auth-form__submit-ring" aria-hidden="true"></span>
+            <span class="auth-form__submit-inner">
+              <span>Eksportuj do Excela</span>
+              <span class="auth-form__submit-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.5 9h11M10 5.5L13.5 9 10 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </span>
+          </button>
         {% endif %}
 
-        <span>{{ cocktails.number }} / {{ cocktails.paginator.num_pages }}</span>
-
-        {% if cocktails.has_next %}
-            <a href="?page={{ cocktails.next_page_number }}">→</a>
-        {% endif %}
+        <div class="cocktail-pagination" data-auth-field>
+          {% if cocktails.has_previous %}
+            <a class="cocktail-pagination__btn" href="?page={{ cocktails.previous_page_number }}">← Poprzednia</a>
+          {% endif %}
+          <span class="cocktail-pagination__info">{{ cocktails.number }} / {{ cocktails.paginator.num_pages }}</span>
+          {% if cocktails.has_next %}
+            <a class="cocktail-pagination__btn" href="?page={{ cocktails.next_page_number }}">Następna →</a>
+          {% endif %}
+        </div>
+      </div>
     </div>
-
+  </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/auth-panel.js' %}"></script>
 {% endblock %}

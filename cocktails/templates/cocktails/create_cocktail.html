@@ -1,32 +1,100 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Create your own cocktaill{% endblock %}
+{% block title %}Nowy koktajl — CocktailMIX{% endblock %}
 
 {% block content %}
-    <div class="small_nav">
-                <a href="{% url 'cocktails' %}">COCKTAILS</a>
-                <a href="/cocktails/users_cocktails">MY COCKTAILS</a>
-                <a href="/cocktails/users_favourite_cocktails/">STARRED</a>
-    </div>
-<section>
-    <div>
-        <h1>Add your cocktail</h1>
-        <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
+<section class="auth-page" data-auth-panel>
+  <div class="auth-split">
+    {% include 'cocktails/_split_visual.html' with eyebrow="Tworzenie" title_line1="Nowy" title_line2="koktajl." text="Dodaj recepturę, składniki i zdjęcie — zbuduj swój własny drink." %}
 
-    {{ formset.management_form }}
-    <h3>INGREDIENTS</h3>
-    {% for ingredient_form in formset %}
-        <div class="ingredient_row">
-            {{ ingredient_form.ingredient }}
-            {{ ingredient_form.quantity }}
-            {{ ingredient_form.unit }}
-        </div>
-    {% endfor %}
+    <div class="auth-panel auth-panel--scroll">
+      <div class="auth-panel__inner auth-panel__inner--wide">
+        <header class="auth-panel__head" data-auth-field>
+          <p class="auth-panel__eyebrow">Formularz</p>
+          <h2 class="auth-panel__title">Dodaj koktajl</h2>
+          <p class="auth-panel__lead">Uzupełnij podstawowe dane i listę składników.</p>
+        </header>
 
-    <button type="submit">SUBMIT</button>
-</form>
+        <nav class="cocktail-nav" data-auth-field aria-label="Nawigacja koktajli">
+          <a href="{% url 'cocktails' %}">Wszystkie</a>
+          <a href="{% url 'users_cocktails' %}">Moje</a>
+          <a href="{% url 'users_favourite_cocktails' %}">Ulubione</a>
+          <a href="{% url 'create_cocktail' %}" class="is-active">Dodaj</a>
+        </nav>
+
+        <form class="auth-form cocktail-form" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="auth-field" data-auth-field>
+            <label class="auth-field__label" for="{{ form.name.id_for_label }}">Nazwa</label>
+            {{ form.name }}
+            {% if form.name.errors %}<p class="auth-field__error">{{ form.name.errors|striptags }}</p>{% endif %}
+          </div>
+
+          <div class="auth-field" data-auth-field>
+            <label class="auth-field__label" for="{{ form.category.id_for_label }}">Kategoria</label>
+            {{ form.category }}
+            {% if form.category.errors %}<p class="auth-field__error">{{ form.category.errors|striptags }}</p>{% endif %}
+          </div>
+
+          <div class="auth-field" data-auth-field>
+            <label class="auth-field__label" for="{{ form.description.id_for_label }}">Opis / sposób przygotowania</label>
+            {{ form.description }}
+            {% if form.description.errors %}<p class="auth-field__error">{{ form.description.errors|striptags }}</p>{% endif %}
+          </div>
+
+          <div class="auth-field" data-auth-field>
+            <label class="auth-field__label" for="{{ form.image.id_for_label }}">Zdjęcie</label>
+            {{ form.image }}
+            {% if form.image.errors %}<p class="auth-field__error">{{ form.image.errors|striptags }}</p>{% endif %}
+          </div>
+
+          <div class="cocktail-formset" data-auth-field>
+            <h3 class="cocktail-formset__title">Składniki</h3>
+            {{ formset.management_form }}
+            {% for ingredient_form in formset %}
+              <div class="cocktail-formset__row">
+                <div class="auth-field">
+                  <label class="auth-field__label">Składnik</label>
+                  {{ ingredient_form.ingredient }}
+                </div>
+                <div class="auth-field">
+                  <label class="auth-field__label">Ilość</label>
+                  {{ ingredient_form.quantity }}
+                </div>
+                <div class="auth-field">
+                  <label class="auth-field__label">Jednostka</label>
+                  {{ ingredient_form.unit }}
+                </div>
+                {% if ingredient_form.DELETE %}
+                  <label class="cocktail-formset__delete">
+                    {{ ingredient_form.DELETE }}
+                    <span>Usuń</span>
+                  </label>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+
+          <button class="auth-form__submit" type="submit" data-auth-field>
+            <span class="auth-form__submit-ring" aria-hidden="true"></span>
+            <span class="auth-form__submit-inner">
+              <span>Zapisz koktajl</span>
+              <span class="auth-form__submit-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.5 9h11M10 5.5L13.5 9 10 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </span>
+          </button>
+        </form>
+      </div>
     </div>
+  </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/auth-panel.js' %}"></script>
 {% endblock %}

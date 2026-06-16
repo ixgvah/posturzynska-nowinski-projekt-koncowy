@@ -1,41 +1,82 @@
-{%  extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Log in {% endblock %}
+{% block title %}Zaloguj — CocktailMIX{% endblock %}
 
 {% block content %}
-<section id="register_main_section">
-    <div id="register_wrapper">
+<section class="auth-page" data-auth-panel>
+  <div class="auth-split">
+    <aside class="auth-visual" aria-hidden="true">
+      <div class="auth-visual__mesh"></div>
+      <span class="auth-visual__orb auth-visual__orb--1"></span>
+      <span class="auth-visual__orb auth-visual__orb--2"></span>
+      <span class="auth-visual__orb auth-visual__orb--3"></span>
 
-        <div id="register_logo">
-            <img id="page-icon" src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="Logo">
-            <h1 id="page-name">CocktailMIX</h1>
-        </div>
+      <div class="auth-visual__content">
+        <img class="auth-visual__logo" src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="">
+        <p class="auth-visual__eyebrow" data-auth-line>CocktailMIX</p>
+        <h1 class="auth-visual__title" data-auth-line>Witaj<br>z powrotem.</h1>
+        <p class="auth-visual__text" data-auth-line>Twój bar czeka. Wskakuj z powrotem i mieszaj dalej.</p>
+      </div>
+    </aside>
 
-        <div id="register_form">
-            <form method="POST" action="{% url 'users:login' %}">
-        {% csrf_token %}
+    <div class="auth-panel">
+      <div class="auth-panel__inner">
+        <header class="auth-panel__head" data-auth-field>
+          <p class="auth-panel__eyebrow">Konto</p>
+          <h2 class="auth-panel__title">Zaloguj się</h2>
+          <p class="auth-panel__lead">Wejdź do swojego konta CocktailMIX.</p>
+        </header>
 
-        <div id="register_text">
-            <h2>Hello again!</h2>
-            <h4>Log in to your Cocktail Mix account</h4>
-        </div>
+        <form class="auth-form" method="POST" action="{% url 'users:login' %}">
+          {% csrf_token %}
 
-        <h4>Username</h4>
-        {{ form.username }}
+          {% if form.non_field_errors %}
+            <div class="auth-form__errors" data-auth-field>
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
 
-        <h4>Password</h4>
-        {{ form.password }}
+          <div class="auth-field" data-auth-field>
+            <label class="auth-field__label" for="{{ form.username.id_for_label }}">Nazwa użytkownika</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+              <p class="auth-field__error">{{ form.username.errors|striptags }}</p>
+            {% endif %}
+          </div>
 
-        {{ form.errors }}
+          <div class="auth-field" data-auth-field>
+            <label class="auth-field__label" for="{{ form.password.id_for_label }}">Hasło</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+              <p class="auth-field__error">{{ form.password.errors|striptags }}</p>
+            {% endif %}
+          </div>
 
-        <button class="form-submit">Let's go</button>
+          <button class="auth-form__submit" type="submit" data-auth-field>
+            <span class="auth-form__submit-ring" aria-hidden="true"></span>
+            <span class="auth-form__submit-inner">
+              <span>Zaloguj się</span>
+              <span class="auth-form__submit-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.5 9h11M10 5.5L13.5 9 10 12.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </span>
+          </button>
 
-        <p>By continuing you agree to CocktailMIX's Terms & Conditions.</p>
+          <p class="auth-form__legal" data-auth-field>Kontynuując, akceptujesz regulamin CocktailMIX.</p>
+        </form>
 
-    </form>
-        </div>
-
+        <footer class="auth-panel__foot" data-auth-field>
+          <p>Nie masz konta? <a href="{% url 'users:register' %}">Dołącz teraz</a></p>
+        </footer>
+      </div>
     </div>
+  </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/auth-panel.js' %}"></script>
 {% endblock %}
