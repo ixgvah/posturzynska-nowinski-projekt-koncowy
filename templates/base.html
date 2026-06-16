@@ -14,57 +14,69 @@
 
 </head>
 <body>
-    <div>
-        <header>
-        <nav>
-            <div class="logo">
-                <img id='page-icon' src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="Ikona">
-                <h1 id="page-name">CocktailMIX</h1>
+    <div class="island">
+        <div class="island-logo--cont"><img class="island-logo" src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="" /></div>
+        <button class="menu-btn" id="menuToggle" aria-expanded="false" aria-controls="menu-overlay" aria-label="Otwórz menu">
+            <div class="button-cont">
+                <svg id="menuIcon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <line class="bar bar-top" x1="2" y1="5" x2="14" y2="5" stroke="#BBBAA6" stroke-width="1.5" stroke-linecap="round" />
+                    <line class="bar bar-mid" x1="2" y1="8" x2="14" y2="8" stroke="#BBBAA6" stroke-width="1.5" stroke-linecap="round" />
+                    <line class="bar bar-bot" x1="2" y1="11" x2="14" y2="11" stroke="#BBBAA6" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
             </div>
-            
-        <ul class="nav-links">
-        <li><a class='menu-labels' href="/">HOME</a></li>
-        <li><a class='menu-labels' href="/cocktails/">COCKTAILS</a></li>
-        <li><a class='menu-labels' href="/about/">ABOUT COCKTAILS</a></li>
-        
-    {% if request.user.is_authenticated %}
-        <li><a class='menu-labels' href="{% url 'ingredients_list' %}">INGREDIENTS</a></li>
-    {% endif %}
-        </ul>
-        <div class="nav-login">
-            {% if request.user.is_authenticated %}
-                <form method="POST" action="{% url 'users:logout' %}">
-                    {% csrf_token %}
-                    <button type="submit"  class="log-btn">LOG OUT</button>
-                </form>
-                
-                <img src="{% static 'icons/user.svg' %}" id="user-icon">
-            {% else %}
-                <a href="/users/login" class="log-btn">LOG IN</a>
-                <a href="/users/register" class="log-btn">SIGN UP</a>
-            {% endif %}
+        </button>
+    </div>
+
+    <div class="menu-overlay" id="menu-overlay" role="dialog" aria-modal="true" aria-label="Menu nawigacji">
+        <div class="menu-backdrop"></div>
+        <div class="menu-panel">
+            <nav>
+                <a class="menu-link" href="/" tabindex="-1"><span>Home</span><span class="link-num">01</span></a>
+                <a class="menu-link" href="/cocktails/" tabindex="-1"><span>Koktajle</span><span class="link-num">02</span></a>
+                <a class="menu-link" href="/about/" tabindex="-1"><span>O koktajlach</span><span class="link-num">03</span></a>
+                {% if request.user.is_authenticated %}
+                    <a class="menu-link" href="{% url 'ingredients_list' %}" tabindex="-1"><span>Składniki</span><span class="link-num">04</span></a>
+                    <form method="POST" action="{% url 'users:logout' %}" class="menu-link-form">
+                        {% csrf_token %}
+                        <button type="submit" class="menu-link" tabindex="-1"><span>Wyloguj</span><span class="link-num">05</span></button>
+                    </form>
+                {% else %}
+                    <a class="menu-link" href="/mix-your-drinks/" tabindex="-1"><span>Mix your drinks</span><span class="link-num">04</span></a>
+                    <a class="menu-link" href="/users/login" tabindex="-1"><span>Zaloguj</span><span class="link-num">05</span></a>
+                    <a class="menu-link" href="/users/register" tabindex="-1"><span>Dołącz</span><span class="link-num">06</span></a>
+                {% endif %}
+            </nav>
         </div>
-  </nav>
-    </header>
     </div>
     <main>
         
     {% block content %}
+
         
     {% endblock %}
     </main>
     
-    <footer>
-    <div class="footer-top">
-        <div class="footer-brand">
-            <img id="page-icon" src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="Ikona">
-            <h3 id="page-name">CocktailMIX</h3>
-            <p>Znajdź idealny koktajl na każdą okazję.</p>
+    <footer class="footer">
+        <div class="bubbles" id="footerBubbles" aria-hidden="true"></div>
+        <div class="content">
+            <div class="footer__credits">
+                <p>Made by Iga Posturzyńska &amp; Mikołaj Nowiński</p>
+            </div>
         </div>
-    </div>
-    <div class="footer-bottom">
-        <p>Made by Iga Posturzyńska & Mikołaj Nowiński</p>
-    </div>
-</footer>
+    </footer>
+
+    <svg class="footer__svg-filter" aria-hidden="true">
+        <defs>
+            <filter id="blob">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="blob"></feColorMatrix>
+            </filter>
+        </defs>
+    </svg>
+<script src="{% static 'vendor/gsap.min.js' %}"></script>
+<script src="{% static 'vendor/ScrollTrigger.min.js' %}"></script>
+<script src="{% static 'js/footer-bubbles.js' %}"></script>
+<script src="{% static 'js/menu.js' %}"></script>
+{% block extra_js %}{% endblock %}
 </body>
 </html>
