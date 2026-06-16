@@ -1,0 +1,23 @@
+{% load static %}
+<aside class="auth-visual{% if image_url %} auth-visual--cover{% endif %}" aria-hidden="true">
+  {% if image_url %}
+    <img class="auth-visual__cover" src="{{ image_url }}" alt="">
+    <div class="auth-visual__mesh auth-visual__mesh--overlay"></div>
+  {% else %}
+    <div class="auth-visual__mesh"></div>
+    <span class="auth-visual__orb auth-visual__orb--1"></span>
+    <span class="auth-visual__orb auth-visual__orb--2"></span>
+    <span class="auth-visual__orb auth-visual__orb--3"></span>
+  {% endif %}
+
+  <div class="auth-visual__content">
+    {% if not image_url %}
+      <img class="auth-visual__logo" src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="">
+    {% endif %}
+    <p class="auth-visual__eyebrow" data-auth-line>{{ eyebrow }}</p>
+    <h1 class="auth-visual__title" data-auth-line>
+      {{ title_line1 }}{% if title_line2 %}<br>{{ title_line2 }}{% endif %}
+    </h1>
+    <p class="auth-visual__text" data-auth-line>{{ text }}</p>
+  </div>
+</aside>
