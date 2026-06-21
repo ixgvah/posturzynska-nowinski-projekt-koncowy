@@ -22,8 +22,8 @@ Aplikacja pozwala użytkownikom na przeglądanie przepisów oraz dla zalogowanyc
 
 1. **Sklonuj repozytorium:**
    ```bash
-   git clone [https://github.com/twoj-nick/twoje-repozytorium.git](https://github.com/twoj-nick/twoje-repozytorium.git)
-   cd twoje-repozytorium
+   git clone https://github.com/ixgvah/posturzynska-nowinski-projekt-koncowy.git
+   cd posturzynska-nowinski-projekt-koncowy
 
 2. **Stwórz i aktywuj środowisko wirtualne**
     ```bash
