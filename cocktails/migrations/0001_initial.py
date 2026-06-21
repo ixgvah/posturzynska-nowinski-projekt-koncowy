@@ -15,50 +15,123 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Ingredient',
+            name="Ingredient",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=50)),
-                ('description', models.TextField(blank=True)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='ingredients/')),
-                ('is_alcoholic', models.BooleanField(default=False)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=50)),
+                ("description", models.TextField(blank=True)),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to="ingredients/"),
+                ),
+                ("is_alcoholic", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='Cocktail',
+            name="Cocktail",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=50)),
-                ('category', models.CharField(max_length=50)),
-                ('image', models.ImageField(blank=True, null=True, upload_to='cocktails/')),
-                ('date', models.DateField(auto_now=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='cocktails', to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=50)),
+                ("category", models.CharField(max_length=50)),
+                (
+                    "image",
+                    models.ImageField(blank=True, null=True, upload_to="cocktails/"),
+                ),
+                ("date", models.DateField(auto_now=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="cocktails",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='CocktailIngrediets',
+            name="CocktailIngrediets",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.IntegerField(default=1)),
-                ('unit', models.CharField(choices=[('ml', 'ml'), ('oz', 'oz'), ('tsp', 'łyżeczka'), ('tbsp', 'łyżka'), ('piece', 'sztuka'), ('dash', 'dash')], default='ml', max_length=50)),
-                ('cocktail', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cocktails.cocktail')),
-                ('ingredient', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='cocktails.ingredient')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quantity", models.IntegerField(default=1)),
+                (
+                    "unit",
+                    models.CharField(
+                        choices=[
+                            ("ml", "ml"),
+                            ("oz", "oz"),
+                            ("tsp", "łyżeczka"),
+                            ("tbsp", "łyżka"),
+                            ("piece", "sztuka"),
+                            ("dash", "dash"),
+                        ],
+                        default="ml",
+                        max_length=50,
+                    ),
+                ),
+                (
+                    "cocktail",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="cocktails.cocktail",
+                    ),
+                ),
+                (
+                    "ingredient",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="cocktails.ingredient",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='cocktail',
-            name='ingredients',
-            field=models.ManyToManyField(blank=True, through='cocktails.CocktailIngrediets', to='cocktails.ingredient'),
+            model_name="cocktail",
+            name="ingredients",
+            field=models.ManyToManyField(
+                blank=True,
+                through="cocktails.CocktailIngrediets",
+                to="cocktails.ingredient",
+            ),
         ),
         migrations.CreateModel(
-            name='UsersFavouriteCocktails',
+            name="UsersFavouriteCocktails",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cocktail', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cocktails.cocktail')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "cocktail",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="cocktails.cocktail",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('user', 'cocktail')},
+                "unique_together": {("user", "cocktail")},
             },
         ),
     ]

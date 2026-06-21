@@ -4,12 +4,15 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.homePage),
-    path('about/', views.about),
-    path('mix-your-drinks/', views.mix_your_drinks),
-    path('cocktails/', include('cocktails.urls')),
-    path('users/', include('users.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
-
+urlpatterns = (
+    [
+        path("admin/", admin.site.urls),
+        path("", views.homePage),
+        path("about/", views.about),
+        path("mix-your-drinks/", views.mix_your_drinks),
+        path("cocktails/", include("cocktails.urls")),
+        path("users/", include("users.urls")),
+    ]
+    + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+)
