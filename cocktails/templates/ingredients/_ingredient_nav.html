@@ -1,0 +1,5 @@
+<nav class="cocktail-nav" data-auth-field aria-label="Nawigacja składników">
+  <a href="{% url 'cocktails' %}">Koktajle</a>
+  <a href="{% url 'ingredients_list' %}"{% if active == 'list' %} class="is-active"{% endif %}>Składniki</a>
+  <a href="{% url 'create_ingredient' %}"{% if active == 'create' %} class="is-active"{% endif %}>Dodaj</a>
+</nav>

@@ -1,4 +1,8 @@
 (function () {
+  if (document.querySelector(".auth-page")) {
+    document.body.classList.add("page-split");
+  }
+
   const page = document.querySelector("[data-auth-panel]");
   if (!page || typeof gsap === "undefined") return;
 

@@ -1,38 +1,51 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}
-    Cocktails List
-{% endblock %}
+{% block title %}Składniki — CocktailMIX{% endblock %}
 
 {% block content %}
-    {% if request.user.is_authenticated %}
-    <div class="small_nav">
-                <a href="{% url 'create_ingredient' %}">ADD MORE</a>
-    </div>
-    {% endif %}
-<section id="about">
-    <div>
-        <div class="header_block">
-            <h1 id='header_cocktail_list'>INGREDIENTS</h1>
-        <p id="cocktail_list_text">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+<section class="auth-page" data-auth-panel>
+  <div class="auth-split">
+    {% include 'cocktails/_split_visual.html' with eyebrow="Baza" title_line1="Lista" title_line2="składników." text="Przeglądaj składniki używane w koktajlach i zarządzaj swoją kolekcją." %}
+
+    <div class="auth-panel auth-panel--scroll">
+      <div class="auth-panel__inner auth-panel__inner--wide">
+        <header class="auth-panel__head" data-auth-field>
+          <p class="auth-panel__eyebrow">Składniki</p>
+          <h2 class="auth-panel__title">Przeglądaj składniki</h2>
+          <p class="auth-panel__lead">Wszystkie składniki dostępne w aplikacji.</p>
+        </header>
+
+        {% include 'ingredients/_ingredient_nav.html' with active='list' %}
+
+        <div class="cocktail-list">
+          {% for ingredient in ingredients %}
+            <div class="cocktail-list__row cocktail-list__row--solo" data-auth-field>
+              {% include 'ingredients/ingredient_index.html' with ingredient=ingredient %}
+            </div>
+          {% empty %}
+            <div class="cocktail-empty-state" data-auth-field>
+              <p class="cocktail-empty">Brak składników w bazie.</p>
+              <a class="cocktail-empty-state__link" href="{% url 'create_ingredient' %}">Dodaj pierwszy składnik →</a>
+            </div>
+          {% endfor %}
         </div>
 
-        {% for ingredient in ingredients %}
-        {% include 'ingredients/ingredient_index.html' with ingredient=ingredient %}
-    {% endfor %}
-
-    <div class="pagination">
-    {% if ingredients.has_previous %}
-        <a href="?page={{ ingredients.previous_page_number }}">←</a>
-    {% endif %}
-
-    <span>{{ ingredients.number }} / {{ ingredients.paginator.num_pages }}</span>
-
-    {% if ingredients.has_next %}
-        <a href="?page={{ ingredients.next_page_number }}">→</a>
-    {% endif %}
-</div>
+        <div class="cocktail-pagination" data-auth-field>
+          {% if ingredients.has_previous %}
+            <a class="cocktail-pagination__btn" href="?page={{ ingredients.previous_page_number }}">← Poprzednia</a>
+          {% endif %}
+          <span class="cocktail-pagination__info">{{ ingredients.number }} / {{ ingredients.paginator.num_pages }}</span>
+          {% if ingredients.has_next %}
+            <a class="cocktail-pagination__btn" href="?page={{ ingredients.next_page_number }}">Następna →</a>
+          {% endif %}
+        </div>
+      </div>
     </div>
+  </div>
+</section>
+{% endblock %}
 
-  </section>
+{% block extra_js %}
+  <script src="{% static 'js/auth-panel.js' %}"></script>
 {% endblock %}

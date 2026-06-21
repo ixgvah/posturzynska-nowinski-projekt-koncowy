@@ -33,17 +33,16 @@
             <nav>
                 <a class="menu-link" href="/" tabindex="-1"><span>Home</span><span class="link-num">01</span></a>
                 <a class="menu-link" href="/cocktails/" tabindex="-1"><span>Koktajle</span><span class="link-num">02</span></a>
-                <a class="menu-link" href="/about/" tabindex="-1"><span>O koktajlach</span><span class="link-num">03</span></a>
                 {% if request.user.is_authenticated %}
-                    <a class="menu-link" href="{% url 'ingredients_list' %}" tabindex="-1"><span>Składniki</span><span class="link-num">04</span></a>
+                    <a class="menu-link" href="{% url 'ingredients_list' %}" tabindex="-1"><span>Składniki</span><span class="link-num">03</span></a>
                     <form method="POST" action="{% url 'users:logout' %}" class="menu-link-form">
                         {% csrf_token %}
-                        <button type="submit" class="menu-link" tabindex="-1"><span>Wyloguj</span><span class="link-num">05</span></button>
+                        <button type="submit" class="menu-link" tabindex="-1"><span>Wyloguj</span><span class="link-num">04</span></button>
                     </form>
                 {% else %}
-                    <a class="menu-link" href="/mix-your-drinks/" tabindex="-1"><span>Mix your drinks</span><span class="link-num">04</span></a>
-                    <a class="menu-link" href="/users/login" tabindex="-1"><span>Zaloguj</span><span class="link-num">05</span></a>
-                    <a class="menu-link" href="/users/register" tabindex="-1"><span>Dołącz</span><span class="link-num">06</span></a>
+                    <a class="menu-link" href="/mix-your-drinks/" tabindex="-1"><span>Mix your drinks</span><span class="link-num">03</span></a>
+                    <a class="menu-link" href="/users/login" tabindex="-1"><span>Zaloguj</span><span class="link-num">04</span></a>
+                    <a class="menu-link" href="/users/register" tabindex="-1"><span>Dołącz</span><span class="link-num">05</span></a>
                 {% endif %}
             </nav>
         </div>
@@ -56,26 +55,27 @@
     {% endblock %}
     </main>
     
-    <footer class="footer">
-        <div class="bubbles" id="footerBubbles" aria-hidden="true"></div>
-        <div class="content">
-            <div class="footer__credits">
-                <p>Made by Iga Posturzyńska &amp; Mikołaj Nowiński</p>
+    <footer class="site-footer">
+        <div class="site-footer__inner">
+            <div class="site-footer__brand">
+                <img class="site-footer__logo" src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="">
+                <span>CocktailMIX</span>
             </div>
+            <nav class="site-footer__nav" aria-label="Stopka">
+                <a href="/">Home</a>
+                <a href="/cocktails/">Koktajle</a>
+            </nav>
+            <p class="site-footer__credits">Made by Iga Posturzyńska &amp; Mikołaj Nowiński</p>
         </div>
+        <div class="site-footer__bottom">© 2026 CocktailMIX</div>
     </footer>
-
-    <svg class="footer__svg-filter" aria-hidden="true">
-        <defs>
-            <filter id="blob">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
-                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 19 -9" result="blob"></feColorMatrix>
-            </filter>
-        </defs>
-    </svg>
+<script>
+  if (document.querySelector(".auth-page")) {
+    document.body.classList.add("page-split");
+  }
+</script>
 <script src="{% static 'vendor/gsap.min.js' %}"></script>
 <script src="{% static 'vendor/ScrollTrigger.min.js' %}"></script>
-<script src="{% static 'js/footer-bubbles.js' %}"></script>
 <script src="{% static 'js/menu.js' %}"></script>
 {% block extra_js %}{% endblock %}
 </body>

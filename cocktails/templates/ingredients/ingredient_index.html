@@ -1,22 +1,24 @@
 {% load static %}
-<div class="cocktail-card">
-
+<article class="cocktail-card">
+  <div class="cocktail-card__media">
     {% if ingredient.image %}
-    <img src="{{ ingredient.image.url }}" alt="{{ ingredient.name }}" class="drink_photo">
+      <img src="{{ ingredient.image.url }}" alt="{{ ingredient.name }}" class="cocktail-card__img">
     {% else %}
-    <img src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="{{ ingredient.name }}" class="drink_photo">
+      <img src="{% static 'icons/glass-coctail-svgrepo-com.svg' %}" alt="{{ ingredient.name }}" class="cocktail-card__img cocktail-card__img--placeholder">
     {% endif %}
-    <div class="cocktail-card-body">
-        <h2 class="drink_name">{{ ingredient.name }}</h2>
-        <p class="drink_description">{{ ingredient.description }}</p>
+  </div>
 
-        {% if request.user.is_authenticated %}
-        <a href="{% url 'edit_ingredient' ingredient.id %}">EDIT</a>
-        <form method="POST" action="{% url 'delete_ingredient' ingredient.id %}">
-            {% csrf_token %}
-            <button type="submit">DELETE</button>
+  <div class="cocktail-card__body">
+    <h2 class="cocktail-card__title">{{ ingredient.name }}</h2>
+    <p class="cocktail-card__desc">{{ ingredient.description|truncatewords:22|default:"Brak opisu." }}</p>
+    {% if request.user.is_authenticated %}
+      <div class="cocktail-detail__actions cocktail-detail__actions--inline">
+        <a class="cocktail-card__cta" href="{% url 'edit_ingredient' ingredient.id %}">Edytuj →</a>
+        <form method="POST" action="{% url 'delete_ingredient' ingredient.id %}" class="cocktail-detail__delete-form">
+          {% csrf_token %}
+          <button type="submit" class="cocktail-detail__delete">Usuń</button>
         </form>
-        {% endif %}
-    </div>
-
-</div>
+      </div>
+    {% endif %}
+  </div>
+</article>

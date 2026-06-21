@@ -104,7 +104,6 @@ body {
 }
 
 
-/* ===== footer z bąbelkami ===== */
 .footer {
     z-index: 1;
     --footer-background: #230814;
@@ -357,35 +356,40 @@ body {
 
 .auth-page {
     width: 100%;
-    min-height: 120vh;
-    margin-top: -4.75rem;
+    min-height: 100vh;
+    margin-top: -72px;
     background: #f4f4f4;
 }
 
 .auth-split {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    min-height: 105vh;
-    align-items: start;
+    min-height: 100vh;
+    align-items: stretch;
 }
 
 .auth-visual {
-    position: sticky;
+    position: fixed;
     top: 0;
-    align-self: start;
+    left: 0;
+    width: 50%;
     height: 100vh;
-    min-height: 100vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    padding: clamp(6rem, 15vh, 9rem) clamp(2rem, 5vw, 4rem) clamp(2rem, 5vw, 4rem);
+    padding: clamp(5.5rem, 12vh, 7rem) clamp(2rem, 5vw, 4rem) clamp(2rem, 5vw, 4rem);
     box-sizing: border-box;
     background: #230814;
     color: #f4f4f4;
     transform: none;
-    border-radius: 0 0 20px 0;
+    border-radius: 0;
+    z-index: 0;
+}
+
+.auth-panel {
+    grid-column: 2;
 }
 
 .auth-visual__mesh {
@@ -665,11 +669,18 @@ body {
     .auth-visual {
         position: relative;
         top: auto;
+        left: auto;
+        width: auto;
         height: auto;
         min-height: 40vh;
         max-height: none;
         justify-content: flex-start;
         padding: clamp(5.5rem, 14vh, 8rem) clamp(1.5rem, 5vw, 4rem) clamp(2rem, 6vh, 3rem);
+    }
+
+    .auth-panel {
+        grid-column: auto;
+        min-height: auto;
     }
 
     .auth-visual__content {
@@ -989,6 +1000,11 @@ body {
     padding-top: 0.5rem;
 }
 
+.cocktail-detail__actions--inline {
+    padding-top: 0.25rem;
+    margin-top: auto;
+}
+
 .cocktail-detail__link {
     display: inline-flex;
     align-items: center;
@@ -1055,6 +1071,11 @@ main {
     padding-right: 0;
     max-width: 100%;
     overflow-x: hidden;
+}
+
+main:has(.auth-page),
+main:has([data-hero]) {
+    padding-top: 0;
 }
 
 .small_nav a {
@@ -1293,7 +1314,6 @@ html.hero-intro-lock body {
     display: grid;
     grid-template-areas: "hero-stack";
     background-color: #230814;
-    margin-top: -4.75rem;
 
 }
 
@@ -1602,4 +1622,98 @@ ul[role="list"] {
     margin-left: 5%;
     margin-top: 5%;
     max-width: 65%;
+}
+
+/* ===== site footer ===== */
+.site-footer {
+    position: relative;
+    z-index: 1;
+    margin-top: 6rem;
+    background: #230814;
+    color: #f4f4f4;
+    border-radius: 28px 28px 0 0;
+    overflow: hidden;
+}
+
+.site-footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 20%, rgba(144, 12, 63, 0.45) 0%, transparent 45%),
+        radial-gradient(circle at 88% 80%, rgba(176, 16, 74, 0.32) 0%, transparent 42%);
+    pointer-events: none;
+}
+
+.site-footer__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 4rem) clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.site-footer__brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Marble-ExtraBold', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+}
+
+.site-footer__logo {
+    width: 2.25rem;
+    height: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.92;
+}
+
+.site-footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.site-footer__nav a {
+    color: rgba(244, 244, 244, 0.72);
+    text-decoration: none;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    transition: color 0.2s ease;
+}
+
+.site-footer__nav a:hover {
+    color: #fff;
+}
+
+.site-footer__credits {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(244, 244, 244, 0.7);
+}
+
+.site-footer__bottom {
+    position: relative;
+    z-index: 1;
+    padding: 1.1rem clamp(1.5rem, 5vw, 4rem);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(244, 244, 244, 0.5);
+}
+
+@media (max-width: 700px) {
+    .site-footer__inner {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
 }

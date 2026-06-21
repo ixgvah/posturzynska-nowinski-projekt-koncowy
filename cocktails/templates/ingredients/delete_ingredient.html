@@ -1,8 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Usuń składnik — CocktailMIX{% endblock %}
 
 {% block content %}
-    <h1>Delete ingredient</h1>
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
+<section class="auth-page" data-auth-panel>
+  <div class="auth-split">
+    {% include 'cocktails/_split_visual.html' with eyebrow="Usuwanie" title_line1="Składnik" title_line2="zablokowany." text="Nie można usunąć składnika powiązanego z koktajlem." %}
+
+    <div class="auth-panel auth-panel--scroll">
+      <div class="auth-panel__inner auth-panel__inner--wide">
+        <header class="auth-panel__head" data-auth-field>
+          <p class="auth-panel__eyebrow">Błąd</p>
+          <h2 class="auth-panel__title">Nie można usunąć</h2>
+          {% if error %}
+            <p class="auth-panel__lead">{{ error }}</p>
+          {% endif %}
+        </header>
+
+        {% include 'ingredients/_ingredient_nav.html' %}
+
+        <a class="cocktail-detail__link" href="{% url 'ingredients_list' %}" data-auth-field>← Wróć do listy</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'js/auth-panel.js' %}"></script>
 {% endblock %}

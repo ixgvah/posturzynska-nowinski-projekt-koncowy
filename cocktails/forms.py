@@ -41,3 +41,8 @@ class IngredientForm(forms.ModelForm):
     class Meta:
         model = Ingredient
         fields = ['name', 'description', 'image']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': INPUT_CLASS}),
+            'description': forms.Textarea(attrs={'class': f'{INPUT_CLASS} auth-field__textarea', 'rows': 4}),
+            'image': forms.FileInput(attrs={'class': 'auth-field__file'}),
+        }
