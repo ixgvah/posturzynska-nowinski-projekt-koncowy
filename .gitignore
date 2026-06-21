@@ -15,6 +15,8 @@ ENV/
 
 #Pliki wgrywane przez użytkowników (np. zdjęcia koktajli i składników)
 media/
+!media/cocktails/
+!media/ingredients/
 
 #Pliki konfiguracyjne IDE i edytorów kodu (np. VS Code, PyCharm)
 .vscode/
