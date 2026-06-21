@@ -11,5 +11,5 @@ urlpatterns = [
     path('mix-your-drinks/', views.mix_your_drinks),
     path('cocktails/', include('cocktails.urls')),
     path('users/', include('users.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
 
