@@ -43,8 +43,8 @@ Aplikacja pozwala użytkownikom na przeglądanie przepisów oraz dla zalogowanyc
 
 5. **Załaduj dane testowe (koktajle i użytkownicy):**
     ```bash
-    python manage.py loaddata initial_data.json
     python manage.py loaddata test_users.json
+    python manage.py loaddata initial_data.json
 
 6. **Uruchom serwer**
     ```bash
